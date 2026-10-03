@@ -1,0 +1,21 @@
+{
+  "name": "Digital Dose",
+  "short_name": "DigitalDose",
+  "description": "Kalkulator dosis & cairan klinis",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070d18",
+  "theme_color": "#070d18",
+  "icons": [
+    {
+      "src": "966c2ce6.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "db1b1e57.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
