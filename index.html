@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#070d18">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,9 +17,11 @@
 :root {
   --bg: #050811;
   --bg2: #0a101f;
-  --panel: rgba(15, 23, 42, 0.58);
-  --panel-glass: rgba(22, 34, 58, 0.45);
-  --panel2: rgba(30, 45, 74, 0.40);
+  --panel: rgba(15, 23, 42, 0.75);
+  --panel-header: rgba(10, 16, 31, 0.88);
+  --panel-drawer: rgba(10, 16, 31, 0.96);
+  --panel-glass: rgba(22, 34, 58, 0.6);
+  --panel2: rgba(30, 45, 74, 0.55);
   --text: #f1f5f9;
   --muted: #94a3b8;
   --brand: #38bdf8;
@@ -27,16 +30,17 @@
   --border: rgba(255, 255, 255, 0.12);
   --border-light: rgba(255, 255, 255, 0.22);
   --shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5), 0 10px 25px -15px rgba(0, 0, 0, 0.3);
-  --glow: 0 0 25px rgba(56, 189, 248, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-  --glass-reflection: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0) 100%);
+  --glow: 0 0 25px rgba(56, 189, 248, 0.22);
 }
 
 [data-theme="light"] {
   --bg: #ebf2fa;
   --bg2: #dbe4f0;
-  --panel: rgba(255, 255, 255, 0.68);
-  --panel-glass: rgba(255, 255, 255, 0.82);
-  --panel2: rgba(241, 245, 249, 0.72);
+  --panel: rgba(255, 255, 255, 0.85);
+  --panel-header: rgba(235, 242, 250, 0.92);
+  --panel-drawer: rgba(240, 245, 252, 0.98);
+  --panel-glass: rgba(255, 255, 255, 0.9);
+  --panel2: rgba(225, 235, 245, 0.85);
   --text: #0f172a;
   --muted: #475569;
   --brand: #0284c7;
@@ -45,8 +49,7 @@
   --border: rgba(15, 23, 42, 0.12);
   --border-light: rgba(15, 23, 42, 0.22);
   --shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.12);
-  --glow: 0 0 20px rgba(2, 132, 199, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.8);
-  --glass-reflection: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
+  --glow: 0 0 20px rgba(2, 132, 199, 0.18);
 }
 
 * { box-sizing: border-box; }
@@ -54,48 +57,15 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: var(--text);
-  background: radial-gradient(1200px 700px at 15% -10%, rgba(56, 189, 248, 0.18), transparent 60%),
-              radial-gradient(1000px 600px at 85% 15%, rgba(99, 102, 241, 0.18), transparent 55%),
-              radial-gradient(800px 500px at 50% 100%, rgba(168, 85, 247, 0.14), transparent 60%),
-              linear-gradient(180deg, var(--bg), var(--bg2));
+  background-color: var(--bg);
+  background-image: radial-gradient(800px 500px at 15% -10%, rgba(56, 189, 248, 0.15), transparent 60%),
+                    radial-gradient(800px 500px at 85% 15%, rgba(99, 102, 241, 0.15), transparent 55%),
+                    linear-gradient(180deg, var(--bg), var(--bg2));
   min-height: 100vh;
-  transition: background-color 0.35s, color 0.35s;
+  transition: background-color 0.3s, color 0.3s;
   overflow-x: hidden;
-}
-
-body::before, body::after {
-  content: "";
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(110px);
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.65;
-  animation: float 20s ease-in-out infinite alternate;
-}
-
-body::before {
-  width: 480px;
-  height: 480px;
-  top: -140px;
-  left: -120px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.4), transparent 70%);
-}
-
-body::after {
-  width: 580px;
-  height: 580px;
-  bottom: -200px;
-  right: -160px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.35), transparent 70%);
-  animation-delay: -8s;
-}
-
-@keyframes float {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(40px, 30px, 0) scale(1.15); }
 }
 
 header {
@@ -104,115 +74,89 @@ header {
   z-index: 40;
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 12px;
   padding: 12px 20px;
-  background: color-mix(in srgb, var(--panel) 65%, transparent);
+  background: var(--panel-header);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .burger {
-  width: 46px;
-  height: 46px;
-  border-radius: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   border: 1px solid var(--border);
   background: var(--panel2);
-  display: grid;
-  place-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5px;
   cursor: pointer;
-  transition: 0.28s;
-  backdrop-filter: blur(12px);
+  transition: 0.25s;
 }
 
 .burger span {
   width: 20px;
   height: 2px;
-  border-radius: 3px;
+  border-radius: 2px;
   background: var(--text);
-  transition: 0.3s;
 }
 
 .burger:hover {
   border-color: var(--brand);
-  box-shadow: var(--glow);
-  transform: translateY(-1px);
 }
 
 .logo {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  background: rgba(10, 20, 38, 0.6);
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(10, 20, 38, 0.8);
   border: 1px solid var(--border-light);
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.25);
-  animation: pulseGlow 4s ease-in-out infinite;
-}
-
-.logo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.35) 50%, transparent 65%);
-  transform: translateX(-120%);
-  animation: shine 4.5s infinite;
-}
-
-@keyframes shine {
-  0%, 70% { transform: translateX(-120%); }
-  85%, 100% { transform: translateX(120%); }
-}
-
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 8px 25px rgba(56, 189, 248, 0.25); }
-  50% { box-shadow: 0 12px 35px rgba(99, 102, 241, 0.45); }
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+  flex-shrink: 0;
 }
 
 .logo svg {
-  width: 40px;
-  height: 40px;
-  position: relative;
-  z-index: 1;
+  width: 36px;
+  height: 36px;
 }
 
-h1 { font-size: 18px; margin: 0; letter-spacing: 0.6px; font-weight: 850; }
-h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 550; }
+h1 { font-size: 17px; margin: 0; letter-spacing: 0.5px; font-weight: 800; }
+h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 500; }
 
 .theme-btn {
   margin-left: auto;
-  width: 46px;
-  height: 46px;
-  border-radius: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   border: 1px solid var(--border);
   background: var(--panel2);
   color: var(--text);
   cursor: pointer;
-  font-size: 17px;
-  transition: 0.28s;
-  backdrop-filter: blur(12px);
-}
-
-.theme-btn:hover {
-  transform: translateY(-1px);
-  border-color: var(--brand);
-  box-shadow: var(--glow);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.25s;
 }
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(2, 6, 15, 0.62);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(2, 6, 15, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   opacity: 0;
   pointer-events: none;
-  transition: 0.32s;
+  transition: opacity 0.3s ease;
   z-index: 50;
 }
 
@@ -226,150 +170,469 @@ h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 55
   top: 0;
   left: 0;
   bottom: 0;
-  width: 305px;
-  max-width: 86vw;
-  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  width: 290px;
+  max-width: 85vw;
+  background: var(--panel-drawer);
   border-right: 1px solid var(--border);
   z-index: 60;
   padding: 20px 15px;
-  transform: translateX(-108%);
-  transition: transform 0.42s cubic-bezier(0.22, 0.85, 0.22, 1);
-  box-shadow: var(--shadow);
+  transform: translateX(-105%);
+  transition: transform 0.35s ease;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(28px) saturate(200%);
-  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-.drawer.open { transform: none; }
+.drawer.open { transform: translateX(0); }
 
 .drawer-head {
   display: flex;
-  gap: 13px;
+  gap: 12px;
   align-items: center;
-  padding: 6px 6px 18px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 14px;
 }
 
-.drawer-head .muted { font-size: 11px; color: var(--muted); }
-.drawer nav { display: flex; flex-direction: column; gap: 7px; overflow-y: auto; flex: 1; }
+.drawer nav { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1; }
 .drawer-foot { padding-top: 14px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center; }
 
 .tab {
   position: relative;
-  overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-align: left;
-  border: 1px solid var(--border);
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
-  color: var(--text);
-  padding: 14px;
-  border-radius: 18px;
-  cursor: pointer;
-  font-weight: 680;
-  font-size: 14px;
-  transition: 0.28s;
-  width: 100%;
-}
-
-.tab::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 4px;
-  height: 0;
-  border-radius: 4px;
-  background: linear-gradient(180deg, var(--brand), var(--brand2));
-  transform: translateY(-50%);
-  transition: height 0.3s;
-}
-
-.tab:hover { background: var(--panel2); transform: translateX(4px); border-color: var(--border-light); }
-
-.tab.active {
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.22), rgba(99, 102, 241, 0.16), rgba(168, 85, 247, 0.12));
-  border-color: rgba(56, 189, 248, 0.45);
-  color: var(--brand);
-  box-shadow: var(--glow);
-}
-
-.tab.active::before { height: 60%; }
-
-main { max-width: 1080px; margin: 0 auto; padding: 14px 18px 95px; }
-
-.hero {
-  position: relative;
-  overflow: hidden;
-  margin: 18px 0 10px;
-  padding: 28px;
-  border-radius: 30px;
-  border: 1px solid var(--border);
-  background: var(--glass-reflection),
-              linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(99, 102, 241, 0.10) 50%, rgba(168, 85, 247, 0.08)),
-              var(--panel);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  transition: 0.35s;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 30px;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.05) 40%, rgba(56, 189, 248, 0.2));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.hero:hover { transform: translateY(-3px); box-shadow: 0 25px 60px -12px rgba(56, 189, 248, 0.25); }
-
-.hero h2 {
-  margin: 0 0 8px;
-  font-size: 26px;
-  line-height: 1.25;
-  background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  font-weight: 850;
-}
-
-.hero p { margin: 0; color: var(--muted); font-size: 14px; max-width: 660px; line-height: 1.6; }
-.hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
-.tag {
-  font-size: 12px;
-  font-weight: 700;
-  padding: 7px 14px;
-  border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--panel2);
   color: var(--text);
-  backdrop-filter: blur(12px);
-  box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
-  transition: 0.25s;
+  padding: 13px 15px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.2s;
+  width: 100%;
 }
-.tag:hover { border-color: var(--brand); transform: translateY(-1px); }
+
+.tab:hover { border-color: var(--brand); }
+
+.tab.active {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.25), rgba(99, 102, 241, 0.2));
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+main { max-width: 900px; margin: 0 auto; padding: 16px 16px 80px; }
+
+.hero {
+  margin: 10px 0 20px;
+  padding: 22px;
+  border-radius: 22px;
+  border: 1px solid var(--border-light);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.hero h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--brand);
+  font-weight: 800;
+}
+
+.hero p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+}
 
 .card {
-  position: relative;
-  overflow: hidden;
-  background: var(--glass-reflection), var(--panel);
+  background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 26px;
-  margin: 20px 0;
+  border-radius: 22px;
+  padding: 22px;
+  margin: 18px 0;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.card h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  color: var(--brand);
+  font-weight: 800;
+}
+
+.sub { margin: 0 0 18px; color: var(--muted); font-size: 13px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+
+label { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+
+input, select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+input:focus, select:focus { outline: none; border-color: var(--brand); box-shadow: var(--glow); }
+
+.btn {
+  position: relative;
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #0284c7, #4f46e5);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
+  transition: 0.2s;
+}
+
+.btn:hover { filter: brightness(1.15); }
+.btn:active { transform: scale(0.98); }
+
+.btn.ghost {
+  background: var(--panel2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.result {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 18px;
+  background: var(--panel2);
+  border: 1px solid var(--border-light);
+}
+
+.big {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--brand);
+  margin-bottom: 4px;
+}
+
+.steps {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px dashed var(--border);
+  font-family: monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.note { margin-top: 10px; font-size: 12px; color: var(--muted); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.chip {
+  padding: 9px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  transition: 0.2s;
+}
+
+.chip:hover { border-color: var(--brand); }
+.chip.active { background: var(--brand); color: #04101e; border-color: var(--brand); font-weight: 700; }
+
+.subchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 16px;
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+}
+
+.subchip {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.subchip.active {
+  background: var(--brand);
+  color: #04101e;
+}
+
+.bodywrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 12px; }
+.bodycard {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px;
+  text-align: center;
+}
+.bodycard h3 { margin: 4px 0 10px; font-size: 13px; color: var(--text); }
+
+svg .part { fill: rgba(148, 163, 184, 0.25); stroke: var(--muted); stroke-width: 1.2; cursor: pointer; transition: 0.2s; }
+svg .part:hover { fill: rgba(56, 189, 248, 0.4); stroke: var(--brand); }
+svg .part.on { fill: var(--brand); stroke: #ffffff; }
+
+.legend { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 13px; }
+
+footer {
+  text-align: center;
+  padding: 20px 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.hidden { display: none !important; }
+</style>
+</head>
+
+<body>
+<header>
+  <button class="burger" onclick="toggleMenu()" aria-label="Buka menu">
+    <span></span><span></span><span></span>
+  </button>
+  
+  <div class="logo">
+    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="dGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0284c7"/>
+          <stop offset="100%" stop-color="#06b6d4"/>
+        </linearGradient>
+      </defs>
+      <path d="M 15 15 H 55 C 88 15 105 38 105 60 C 105 82 88 105 55 105 H 15 Z" fill="url(#dGrad1)"/>
+      <rect x="25" y="28" width="40" height="54" rx="8" fill="#ffffff"/>
+      <rect x="29" y="33" width="32" height="12" rx="3" fill="#e0f2fe"/>
+      <text x="58" y="42" font-family="monospace" font-size="7" font-weight="bold" fill="#0369a1" text-anchor="end">0.00</text>
+      <rect x="29" y="48" width="14" height="14" rx="3" fill="#0284c7"/>
+      <text x="36" y="58.5" font-family="sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">+</text>
+      <rect x="47" y="48" width="14" height="14" rx="3" fill="#0284c7"/>
+      <text x="54" y="58" font-family="sans-serif" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">−</text>
+      <rect x="29" y="65" width="14" height="14" rx="3" fill="#0284c7"/>
+      <text x="36" y="75" font-family="sans-serif" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">×</text>
+      <rect x="47" y="65" width="14" height="14" rx="3" fill="#14b8a6"/>
+      <text x="54" y="75" font-family="sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">=</text>
+      <path d="M 72 32 H 80 V 38 H 86 V 46 H 80 V 52 H 72 V 46 H 66 V 38 H 72 Z" fill="#ffffff"/>
+    </svg>
+  </div>
+  
+  <h1>DIGITAL DOSE<small>Kalkulator dosis &amp; cairan klinis</small></h1>
+  <button class="theme-btn" onclick="toggleTheme()" aria-label="Ubah Tema">🌗</button>
+</header>
+
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>
+
+<aside id="drawer" class="drawer">
+  <div class="drawer-head">
+    <div class="logo">
+      <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="dGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0284c7"/>
+            <stop offset="100%" stop-color="#06b6d4"/>
+          </linearGradient>
+        </defs>
+        <path d="M 15 15 H 55 C 88 15 105 38 105 60 C 105 82 88 105 55 105 H 15 Z" fill="url(#dGrad2)"/>
+        <rect x="25" y="28" width="40" height="54" rx="8" fill="#ffffff"/>
+        <rect x="29" y="33" width="32" height="12" rx="3" fill="#e0f2fe"/>
+        <text x="58" y="42" font-family="monospace" font-size="7" font-weight="bold" fill="#0369a1" text-anchor="end">0.00</text>
+      </svg>
+    </div>
+    <div><b>DIGITAL DOSE</b><div class="muted" style="font-size:11px;">Kalkulator klinis presisi</div></div>
+  </div>
+  <nav id="tabs"></nav>
+  <div class="drawer-foot">Versi 1.7 · Alat bantu klinis</div>
+</aside>
+
+<main>
+  <div class="hero">
+    <h2>Perhitungan klinis yang presisi, cepat, dan transparan.</h2>
+    <p>Digital Dose membantu perhitungan cairan, dosis inotropik/vasoaktif, resusitasi luka bakar, analisis gas darah, dan parameter dasar pasien.</p>
+    <div class="hero-tags">
+      <span class="tag">💧 Infus</span>
+      <span class="tag">💉 Vasoaktif</span>
+      <span class="tag">🩺 Baxter</span>
+      <span class="tag">🧍 TBSA</span>
+      <span class="tag">🫁 AGD/BGA</span>
+      <span class="tag">⚖️ BMI</span>
+      <span class="tag">❤️ MAP</span>
+    </div>
+  </div>
+
+  <!-- Infus -->
+  <section id="m-infus" class="page">
+    <div class="card">
+      <h2>Infus &amp; Tetesan</h2>
+      <p class="sub">Pilih sub-menu perhitungan infus.</p>
+      
+      <div class="subchips">
+        <button class="subchip active" onclick="showInfus('tetesan',this)">💧 Hitung Tetesan</button>
+        <button class="subchip" onclick="showInfus('kecepatan',this)">⚡ Kecepatan Infus</button>
+        <button class="subchip" onclick="showInfus('habis',this)">⏱️ Waktu Habis</button>
+      </div>
+
+      <div id="inf-tetesan" class="subpage">
+        <div class="grid">
+          <div><label>Volume cairan (mL)</label><input id="t-vol" type="number" min="0" placeholder="500"></div>
+          <div><label>Waktu — jam</label><input id="t-h" type="number" min="0" placeholder="8"></div>
+          <div><label>Waktu — menit</label><input id="t-m" type="number" min="0" max="59" placeholder="0"></div>
+          <div>
+            <label>Metode pemberian</label>
+            <select id="t-method" onchange="tetesanMethod()">
+              <option value="manual">Tetesan manual</option>
+              <option value="pump">Infus pump</option>
+            </select>
+          </div>
+          <div id="t-factor-box">
+            <label>Faktor tetes</label>
+            <select id="t-factor">
+              <option value="20">Makro — 20 tpm/mL</option>
+              <option value="15">Makro — 15 tpm/mL</option>
+              <option value="60">Mikro — 60 tpm/mL</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" onclick="calcTetesan()">Hitung Tetesan Infus</button>
+        <div id="t-out"></div>
+      </div>
+
+      <div id="inf-kecepatan" class="subpage hidden">
+        <div class="grid">
+          <div><label>Volume cairan (mL)</label><input id="k-vol" type="number" min="0" placeholder="500"></div>
+          <div><label>Waktu — jam</label><input id="k-h" type="number" min="0" placeholder="8"></div>
+          <div><label>Waktu — menit</label><input id="k-m" type="number" min="0" max="59" placeholder="0"></div>
+          <div>
+            <label>Faktor tetes — opsional</label>
+            <select id="k-factor">
+              <option value="20">Makro — 20 tpm/mL</option>
+              <option value="15">Makro — 15 tpm/mL</option>
+              <option value="60">Mikro — 60 tpm/mL</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" onclick="calcKecepatan()">Hitung Kecepatan Infus</button>
+        <div id="k-out"></div>
+      </div>
+
+      <div id="inf-habis" class="subpage hidden">
+        <div class="grid">
+          <div><label>Volume tersisa (mL)</label><input id="h-vol" type="number" min="0" placeholder="400"></div>
+          <div><label>Kecepatan infus (mL/jam)</label><input id="h-rate" type="number" min="0" step="0.1" placeholder="50"></div>
+          <div><label>Waktu mulai infus</label><input id="h-start" type="time"></div>
+        </div>
+        <button class="btn" onclick="calcHabis()">Hitung Waktu Habis</button>
+        <div id="h-out"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dosis -->
+  <section id="m-dosis" class="page hidden">
+    <div class="card">
+      <h2>Dosis Obat Inotropik &amp; Vasoaktif</h2>
+      <p class="sub">Rate infus pump (mL/jam); vasopressor memakai nanogram/kgBB/menit.</p>
+      
+      <div class="chips" id="drug-chips">
+        <button class="chip active" data-d="dopamin">Dopamin</button>
+        <button class="chip" data-d="dobutamin">Dobutamin</button>
+        <button class="chip" data-d="nicardipine">Nicardipine</button>
+        <button class="chip" data-d="vascon">Vascon / Norepinephrine</button>
+        <button class="chip" data-d="epinefrin">Epinefrin / Adrenalin</button>
+      </div>
+
+      <div class="grid">
+        <div><label>Berat badan (kg)</label><input id="d-bb" type="number" min="0" step="0.1" placeholder="60"></div>
+        <div><label id="d-dose-label">Dosis (mcg/kgBB/menit)</label><input id="d-dose" type="number" min="0" step="0.01" placeholder="5"></div>
+        <div>
+          <label>Opsi pengenceran</label>
+          <select id="d-dil" onchange="syncDilChips()">
+            <option value="50">Dioplos 50 mL — 80 mcg/cc</option>
+            <option value="40">Dioplos 40 mL — 100 mcg/cc</option>
+            <option value="none">Tanpa oplos</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="chips" id="dil-chips">
+        <button class="chip active" data-v="50">50 mL</button>
+        <button class="chip" data-v="40">40 mL</button>
+        <button class="chip" data-v="none">Tanpa oplos</button>
+      </div>
+
+      <button class="btn" onclick="calcDosis()">Hitung</button>
+      <div id="d-out"></div>
+    </div>
+  </section>
+
+  <!-- Baxter -->
+  <section id="m-baxter" class="page hidden">
+    <div class="card">
+      <h2>Resusitasi Cairan Luka Bakar — Baxter</h2>
+      <p class="sub">Dewasa: 4 mL × BB × %TBSA. Anak: 3 mL × BB × %TBSA + rumatan.</p>
+      
+      <div class="chips" id="b-cat">
+        <button class="chip active" data-v="dewasa">Dewasa</button>
+        <button class="chip" data-v="anak">Anak</button>
+      </div>
+
+      <div class="grid">
+        <div><label>Berat badan (kg)</label><input id="b-bb" type="number" min="0" step="0.1" placeholder="60"></div>
+        <div><label>Luas luka bakar (% TBSA)</label><input id="b-tbsa" type="number" min="0" max="100" step="0.5" placeholder="30"></div>
+        <div id="b-maint-box" class="hidden"><label>Cairan rumatan (mL/24 jam)</label><input id="b-maint" type="number" min="0" placeholder="1500"></div>
+      </div>
+
+      <button class="btn ghost" onclick="calcMaintenance()">Hitung rumatan (Holliday-Segar)</button>
+      <button class="btn" onclick="calcBaxter()">Hitung Baxter</button>
+      <div id="b-out"></div>
+    </div>
+  </section>
+
+  <!-- Rule of Nines -->
+  <section id="m-nines" class="page hidden">
+    <div class="card">
+      <h2>Rule of Nines — % TBSA</h2>
+      <p class="sub">Klik area depan/belakang, lalu sinkronkan ke Baxter.</p>
+      
+      <div class="bodywrap">
+        <div class="bodycard">
+          <h3>Tampak Depan</h3>
+          <svg viewBox="0 0 200 320" width="100%">
+            <circle class="part" data-r="head" cx="100" cy="35"backdrop-filter: blur(28px) saturate(180%);
   animation: fade 0.45s ease;
   transition: 0.35s;
 }
