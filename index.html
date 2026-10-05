@@ -1,17 +1,22 @@
-
 <!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#070d18">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Digital Dose">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
 <title>Digital Dose — Kalkulator Klinis</title>
 <link rel="manifest" href="./manifest.webmanifest">
-<link rel="icon" type="image/png" href="./icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="./icons/icon-512.png">
 
 <style>
 :root {
@@ -31,6 +36,7 @@
   --border-light: rgba(255, 255, 255, 0.22);
   --shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5), 0 10px 25px -15px rgba(0, 0, 0, 0.3);
   --glow: 0 0 25px rgba(56, 189, 248, 0.22);
+  --touch-feedback: rgba(56, 189, 248, 0.3);
 }
 
 [data-theme="light"] {
@@ -50,10 +56,18 @@
   --border-light: rgba(15, 23, 42, 0.22);
   --shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.12);
   --glow: 0 0 20px rgba(2, 132, 199, 0.18);
+  --touch-feedback: rgba(2, 132, 199, 0.25);
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+* { 
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html { 
+  scroll-behavior: smooth;
+  touch-action: manipulation;
+}
 
 body {
   margin: 0;
@@ -64,8 +78,11 @@ body {
                     radial-gradient(800px 500px at 85% 15%, rgba(99, 102, 241, 0.15), transparent 55%),
                     linear-gradient(180deg, var(--bg), var(--bg2));
   min-height: 100vh;
+  min-height: 100dvh;
   transition: background-color 0.3s, color 0.3s;
   overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 header {
@@ -75,7 +92,7 @@ header {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 20px;
+  padding: max(12px, env(safe-area-inset-top)) 20px 12px;
   background: var(--panel-header);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(16px);
@@ -95,7 +112,10 @@ header {
   align-items: center;
   gap: 5px;
   cursor: pointer;
-  transition: 0.25s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
 
 .burger span {
@@ -103,10 +123,22 @@ header {
   height: 2px;
   border-radius: 2px;
   background: var(--text);
+  transition: all 0.2s;
 }
 
 .burger:hover {
   border-color: var(--brand);
+  transform: scale(1.05);
+}
+
+.burger:active {
+  transform: scale(0.92);
+  background: var(--touch-feedback);
+  border-color: var(--brand);
+}
+
+.burger:active span {
+  background: var(--brand);
 }
 
 .logo {
@@ -122,6 +154,11 @@ header {
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
   flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.logo:hover {
+  transform: scale(1.05);
 }
 
 .logo svg {
@@ -129,8 +166,21 @@ header {
   height: 36px;
 }
 
-h1 { font-size: 17px; margin: 0; letter-spacing: 0.5px; font-weight: 800; }
-h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 500; }
+h1 { 
+  font-size: 17px; 
+  margin: 0; 
+  letter-spacing: 0.5px; 
+  font-weight: 800;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+h1 small { 
+  display: block; 
+  font-size: 11px; 
+  color: var(--muted); 
+  font-weight: 500; 
+}
 
 .theme-btn {
   margin-left: auto;
@@ -145,7 +195,21 @@ h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 50
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.25s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.theme-btn:hover {
+  border-color: var(--brand);
+  transform: scale(1.05);
+}
+
+.theme-btn:active {
+  transform: scale(0.92);
+  background: var(--touch-feedback);
+  border-color: var(--brand);
 }
 
 .overlay {
@@ -177,7 +241,7 @@ h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 50
   z-index: 60;
   padding: 20px 15px;
   transform: translateX(-105%);
-  transition: transform 0.35s ease;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
@@ -185,7 +249,9 @@ h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 50
   -webkit-backdrop-filter: blur(20px);
 }
 
-.drawer.open { transform: translateX(0); }
+.drawer.open { 
+  transform: translateX(0);
+}
 
 .drawer-head {
   display: flex;
@@ -196,8 +262,24 @@ h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 50
   margin-bottom: 14px;
 }
 
-.drawer nav { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1; }
-.drawer-foot { padding-top: 14px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center; }
+.drawer nav { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+  overflow-y: auto; 
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.drawer-foot { 
+  padding-top: 14px; 
+  border-top: 1px solid var(--border); 
+  font-size: 11px; 
+  color: var(--muted); 
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
 
 .tab {
   position: relative;
@@ -213,11 +295,23 @@ h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 50
   cursor: pointer;
   font-weight: 600;
   font-size: 14px;
-  transition: 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
 
-.tab:hover { border-color: var(--brand); }
+.tab:hover { 
+  border-color: var(--brand);
+  transform: translateX(2px);
+}
+
+.tab:active {
+  transform: scale(0.96) translateX(0);
+  background: var(--touch-feedback);
+  border-color: var(--brand);
+}
 
 .tab.active {
   background: linear-gradient(90deg, rgba(56, 189, 248, 0.25), rgba(99, 102, 241, 0.2));
@@ -225,7 +319,12 @@ h1 small { display: block; font-size: 11px; color: var(--muted); font-weight: 50
   color: var(--brand);
 }
 
-main { max-width: 900px; margin: 0 auto; padding: 16px 16px 80px; }
+main { 
+  max-width: 900px; 
+  margin: 0 auto; 
+  padding: 16px 16px 80px;
+  padding: 16px max(16px, env(safe-area-inset-right)) max(80px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
 
 .hero {
   margin: 10px 0 20px;
@@ -246,8 +345,20 @@ main { max-width: 900px; margin: 0 auto; padding: 16px 16px 80px; }
   font-weight: 800;
 }
 
-.hero p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
-.hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.hero p { 
+  margin: 0; 
+  color: var(--muted); 
+  font-size: 13.5px; 
+  line-height: 1.6; 
+}
+
+.hero-tags { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 8px; 
+  margin-top: 16px; 
+}
+
 .tag {
   font-size: 12px;
   font-weight: 600;
@@ -256,6 +367,8 @@ main { max-width: 900px; margin: 0 auto; padding: 16px 16px 80px; }
   border: 1px solid var(--border);
   background: var(--panel2);
   color: var(--text);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .card {
@@ -276,10 +389,27 @@ main { max-width: 900px; margin: 0 auto; padding: 16px 16px 80px; }
   font-weight: 800;
 }
 
-.sub { margin: 0 0 18px; color: var(--muted); font-size: 13px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+.sub { 
+  margin: 0 0 18px; 
+  color: var(--muted); 
+  font-size: 13px; 
+}
 
-label { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 14px; 
+}
+
+label { 
+  display: block; 
+  font-size: 12px; 
+  font-weight: 700; 
+  color: var(--muted); 
+  margin-bottom: 6px;
+  user-select: none;
+  -webkit-user-select: none;
+}
 
 input, select {
   width: 100%;
@@ -289,10 +419,20 @@ input, select {
   background: var(--panel2);
   color: var(--text);
   font-size: 14px;
-  transition: 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
 }
 
-input:focus, select:focus { outline: none; border-color: var(--brand); box-shadow: var(--glow); }
+input:focus, select:focus { 
+  outline: none; 
+  border-color: var(--brand); 
+  box-shadow: var(--glow);
+  transform: scale(1.01);
+}
+
+input:active, select:active {
+  border-color: var(--brand);
+}
 
 .btn {
   position: relative;
@@ -307,11 +447,24 @@ input:focus, select:focus { outline: none; border-color: var(--brand); box-shado
   font-size: 14px;
   cursor: pointer;
   box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
-  transition: 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  overflow: hidden;
 }
 
-.btn:hover { filter: brightness(1.15); }
-.btn:active { transform: scale(0.98); }
+.btn:hover { 
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4);
+}
+
+.btn:active { 
+  transform: scale(0.96) translateY(0);
+  filter: brightness(0.95);
+  box-shadow: 0 3px 12px rgba(2, 132, 199, 0.25);
+}
 
 .btn.ghost {
   background: var(--panel2);
@@ -320,12 +473,28 @@ input:focus, select:focus { outline: none; border-color: var(--brand); box-shado
   box-shadow: none;
 }
 
+.btn.ghost:hover {
+  border-color: var(--brand);
+  background: var(--touch-feedback);
+}
+
+.btn.ghost:active {
+  background: var(--touch-feedback);
+  border-color: var(--brand);
+}
+
 .result {
   margin-top: 18px;
   padding: 18px;
   border-radius: 18px;
   background: var(--panel2);
   border: 1px solid var(--border-light);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .big {
@@ -347,9 +516,19 @@ input:focus, select:focus { outline: none; border-color: var(--brand); box-shado
   line-height: 1.5;
 }
 
-.note { margin-top: 10px; font-size: 12px; color: var(--muted); }
+.note { 
+  margin-top: 10px; 
+  font-size: 12px; 
+  color: var(--muted); 
+}
 
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.chips { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 8px; 
+  margin: 12px 0; 
+}
+
 .chip {
   padding: 9px 14px;
   border-radius: 20px;
@@ -359,11 +538,29 @@ input:focus, select:focus { outline: none; border-color: var(--brand); box-shado
   font-size: 12px;
   font-weight: 600;
   color: var(--text);
-  transition: 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
 
-.chip:hover { border-color: var(--brand); }
-.chip.active { background: var(--brand); color: #04101e; border-color: var(--brand); font-weight: 700; }
+.chip:hover { 
+  border-color: var(--brand);
+  transform: translateY(-1px);
+}
+
+.chip:active { 
+  transform: scale(0.95) translateY(0);
+  background: var(--touch-feedback);
+  border-color: var(--brand);
+}
+
+.chip.active { 
+  background: var(--brand); 
+  color: #04101e; 
+  border-color: var(--brand); 
+  font-weight: 700; 
+}
 
 .subchips {
   display: flex;
@@ -387,6 +584,21 @@ input:focus, select:focus { outline: none; border-color: var(--brand); box-shado
   font-weight: 700;
   font-size: 12px;
   cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.subchip:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.subchip:active {
+  transform: scale(0.95);
+  background: var(--touch-feedback);
+  color: var(--brand);
 }
 
 .subchip.active {
@@ -394,25 +606,225 @@ input:focus, select:focus { outline: none; border-color: var(--brand); box-shado
   color: #04101e;
 }
 
-.bodywrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 12px; }
+.bodywrap { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+  gap: 14px; 
+  margin-top: 12px; 
+}
+
 .bodycard {
   background: var(--panel2);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 14px;
   text-align: center;
+  transition: transform 0.2s;
 }
-.bodycard h3 { margin: 4px 0 10px; font-size: 13px; color: var(--text); }
 
-svg .part { fill: rgba(148, 163, 184, 0.25); stroke: var(--muted); stroke-width: 1.2; cursor: pointer; transition: 0.2s; }
-svg .part:hover { fill: rgba(56, 189, 248, 0.4); stroke: var(--brand); }
-svg .part.on { fill: var(--brand); stroke: #ffffff; }
+.bodycard:hover {
+  transform: translateY(-2px);
+}
 
-.legend { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 13px; }
+svg .part { 
+  fill: rgba(148, 163, 184, 0.25); 
+  stroke: var(--muted); 
+  stroke-width: 1.2; 
+  cursor: pointer; 
+  transition: all 0.2s;
+}
+
+svg .part:hover { 
+  fill: rgba(56, 189, 248, 0.4); 
+  stroke: var(--brand); 
+}
+
+svg .part.on { 
+  fill: var(--brand); 
+  stroke: #ffffff; 
+}
+
+svg .part:active {
+  fill: var(--brand2);
+  transform: scale(0.98);
+}
+
+.legend { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-top: 12px; 
+  font-size: 13px; 
+}
 
 footer {
   text-align: center;
   padding: 20px 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.hidden { 
+  display: none !important; 
+}
+
+/* Install prompt button */
+.install-btn {
+  position: fixed;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  right: max(20px, env(safe-area-inset-right));
+  z-index: 100;
+  background: linear-gradient(135deg, var(--brand), var(--brand2));
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 12px 20px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(56, 189, 248, 0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  display: none;
+}
+
+.install-btn.show {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: slideUp 0.4s ease;
+}
+
+.install-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(56, 189, 248, 0.5);
+}
+
+.install-btn:active {
+  transform: scale(0.95) translateY(0);
+  box-shadow: 0 5px 20px rgba(56, 189, 248, 0.3);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Page transitions */
+.page {
+  animation: pageIn 0.35s ease;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.subpage {
+  animation: subpageIn 0.25s ease;
+}
+
+@keyframes subpageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <button class="burger" onclick="toggleMenu()" aria-label="Buka menu">
+    <span></span><span></span><span></span>
+  </button>
+  
+  <div class="logo">
+    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="dGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0284c7"/>
+          <stop offset="100%" stop-color="#06b6d4"/>
+        </linearGradient>
+      </defs>
+      <path d="M 15 15 H 55 C 88 15 105 38 105 60 C 105 82 88 105 55 105 H 15 Z" fill="url(#dGrad1)"/>
+      <rect x="25" y="28" width="40" height="54" rx="8" fill="#ffffff"/>
+      <rect x="29" y="33" width="32" height="12" rx="3" fill="#e0f2fe"/>
+      <text x="58" y="42" font-family="monospace" font-size="7" font-weight="bold" fill="#0369a1" text-anchor="end">0.00</text>
+      <rect x="29" y="48" width="14" height="14" rx="3" fill="#0284c7"/>
+      <text x="36" y="58.5" font-family="sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">+</text>
+      <rect x="47" y="48" width="14" height="14" rx="3" fill="#0284c7"/>
+      <text x="54" y="58" font-family="sans-serif" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">−</text>
+      <rect x="29" y="65" width="14" height="14" rx="3" fill="#0284c7"/>
+      <text x="36" y="75" font-family="sans-serif" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">×</text>
+      <rect x="47" y="65" width="14" height="14" rx="3" fill="#14b8a6"/>
+      <text x="54" y="75" font-family="sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">=</text>
+      <path d="M 72 32 H 80 V 38 H 86 V 46 H 80 V 52 H 72 V 46 H 66 V 38 H 72 Z" fill="#ffffff"/>
+    </svg>
+  </div>
+  
+  <h1>DIGITAL DOSE<small>Kalkulator dosis &amp; cairan klinis</small></h1>
+  <button class="theme-btn" onclick="toggleTheme()" aria-label="Ubah Tema">🌗</button>
+</header>
+
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>
+
+<aside id="drawer" class="drawer">
+  <div class="drawer-head">
+    <div class="logo">
+      <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="dGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0284c7"/>
+            <stop offset="100%" stop-color="#06b6d4"/>
+          </linearGradient>
+        </defs>
+        <path d="M 15 15 H 55 C 88 15 105 38 105 60 C 105 82 88 105 55 105 H 15 Z" fill="url(#dGrad2)"/>
+        <rect x="25" y="28" width="40" height="54" rx="8" fill="#ffffff"/>
+        <rect x="29" y="33" width="32" height="12" rx="3" fill="#e0f2fe"/>
+        <text x="58" y="42" font-family="monospace" font-size="7" font-weight="bold" fill="#0369a1" text-anchor="end">0.00</text>
+      </svg>
+    </div>
+    <div><b>DIGITAL DOSE</b><div class="muted" style="font-size:11px;">Kalkulator klinis presisi</div></div>
+  </div>
+  <nav id="tabs"></nav>
+  <div class="drawer-foot">Versi 1.7 · Alat bantu klinis</div>
+</aside>
+
+<main>
+  <div class="hero">
+    <h2>Perhitungan klinis yang presisi, cepat, dan transparan.</h2>
+    <p>Digital Dose membantu perhitungan cairan, dosis inotropik/vasoaktif, resusitasi luka bakar, analisis gas darah, dan parameter dasar pasien.</p>
+    <div class="hero-tags">
+      <span class="tag">💧 Infus</span>
+      <span class="tag">💉 Vasoaktif</span>
+      <span class="tag">🩺 Baxter</span>
+      <span class="tag">🧍 TBSA</span>
+      <span class="tag">🫁 AGD/BGA</span>
+      <span class="tag">⚖️ BMI</span>
+      <span class="tag">❤️ MAP</span>
+    </div>
+  </div>
+
+  <!-- Infus -->
+  <section id="m-infus" class="page">
+    <div class="card">
+      <h2>Infus &amp; Tetesan</h2>
+      <p class="sub">Pilih sub-menu perhitungan infus.</p>
+      
+      <div class="subchips">
+        <button class="subchip active" onclick="showInfus('tetesan',this)">💧 Hitung Tetesan</button>
+        <button class="subchip" onclick="showInfus('kecepatan',this)">⚡ Kecepatan Infus</button>
+        <button class="subchip" onclick="showInfus('habis',this)">⏱️ Waktu Habis</button>
+      </div>
+
+      <div id="inf-tetesan" class="subpage">
+        <div class="grid">
+          <div><label>Volume cairan (mL)</label><input id="t-vol" type="number" min="0" placeholder="500"></div>
+          <div><label>Waktu — jam</label><input id="t-h" type="number" min="0" placeholder="8"></div>
+          <div><label>Waktu — menit</label><input id="t-m" type="number" min="0" max="59" placeholder="0"></div>
+          <div>
+            <label>Metode pemberian</lx 10px;
   font-size: 11px;
   color: var(--muted);
 }
