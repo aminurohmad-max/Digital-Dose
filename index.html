@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
@@ -371,6 +370,296 @@ main { max-width: 1080px; margin: 0 auto; padding: 14px 18px 95px; }
   box-shadow: var(--shadow);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
+  animation: fade 0.45s ease;
+  transition: 0.35s;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.7), rgba(168, 85, 247, 0.5), transparent);
+}
+
+.card:hover { transform: translateY(-3px); border-color: rgba(56, 189, 248, 0.4); box-shadow: 0 25px 55px -10px rgba(0, 0, 0, 0.45); }
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.card h2 {
+  margin: 0 0 6px;
+  font-size: 21px;
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 850;
+}
+
+.sub { margin: 0 0 20px; color: var(--muted); font-size: 13px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: 14px; }
+
+label { display: block; font-size: 12px; font-weight: 750; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.3px; }
+
+input, select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel2) 80%, transparent);
+  color: var(--text);
+  font-size: 15px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  transition: 0.25s;
+}
+
+input:hover, select:hover { border-color: rgba(56, 189, 248, 0.5); }
+input:focus, select:focus { outline: none; border-color: var(--brand); box-shadow: var(--glow); background: var(--panel2); }
+
+.btn {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #38bdf8, #6366f1 60%, #a855f7);
+  color: #04101e;
+  font-weight: 850;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
+  transition: 0.28s;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: skewX(-20deg);
+  transition: 0.65s;
+}
+
+.btn:hover::after { left: 130%; }
+.btn:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 14px 38px rgba(99, 102, 241, 0.45); }
+.btn:active { transform: scale(0.985); }
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0);
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to { transform: scale(3.2); opacity: 0; }
+}
+
+.btn.ghost {
+  background: var(--panel2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.12);
+}
+
+.btn.ghost:hover { border-color: var(--brand); box-shadow: var(--glow); }
+
+.result {
+  margin-top: 20px;
+  padding: 22px;
+  border-radius: 22px;
+  background: var(--glass-reflection),
+              linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(99, 102, 241, 0.12) 55%, rgba(168, 85, 247, 0.10));
+  border: 1px solid var(--border-light);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  animation: fade 0.35s ease;
+}
+
+.big {
+  font-size: 34px;
+  font-weight: 900;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.steps {
+  margin-top: 14px;
+  padding: 15px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--panel2) 90%, transparent);
+  border: 1px dashed var(--border);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.note { margin-top: 12px; font-size: 12px; color: var(--muted); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0; }
+.chip {
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition: 0.25s;
+  color: var(--text);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.chip:hover { border-color: var(--brand); transform: translateY(-1px); box-shadow: var(--glow); }
+.chip.active { background: linear-gradient(90deg, var(--brand), var(--brand2)); color: #04101e; border-color: transparent; box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3); }
+
+.subchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 18px;
+  padding: 6px;
+  border-radius: 20px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+}
+
+.subchip {
+  flex: 1;
+  min-width: 130px;
+  padding: 12px 10px;
+  border: none;
+  border-radius: 15px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 750;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.subchip.active {
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  color: #04101e;
+  box-shadow: 0 8px 22px rgba(56, 189, 248, 0.35);
+}
+
+.bodywrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); gap: 16px; margin-top: 12px; }
+.bodycard {
+  background: var(--glass-reflection), var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 16px;
+  text-align: center;
+  backdrop-filter: blur(16px);
+  transition: 0.28s;
+}
+.bodycard:hover { transform: translateY(-4px); border-color: var(--brand); box-shadow: var(--glow); }
+.bodycard h3 { margin: 4px 0 12px; font-size: 14px; color: var(--text); }
+
+svg .part { fill: rgba(148, 163, 184, 0.2); stroke: var(--muted); stroke-width: 1.2; cursor: pointer; transition: 0.22s; }
+[data-theme="light"] svg .part { fill: rgba(148, 163, 184, 0.25); stroke: #94a3b8; }
+svg .part:hover { fill: rgba(56, 189, 248, 0.4); stroke: var(--brand); }
+svg .part.on { fill: var(--brand); stroke: var(--brand2); filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.7)); }
+
+.legend { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 13px; }
+
+footer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--panel) 75%, transparent);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+.hidden { display: none !important; }
+</style>
+</head>
+
+<body>
+<header>
+  <button class="burger" onclick="toggleMenu()" aria-label="Buka menu"><span></span><span></span><span></span></button>
+  <div class="logo">
+    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="dGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0284c7"/>
+          <stop offset="100%" stop-color="#06b6d4"/>
+        </linearGradient>
+      </defs>
+      <!-- Stylized D background -->
+      <path d="M 15 15 H 55 C 88 15 105 38 105 60 C 105 82 88 105 55 105 H 15 Z" fill="url(#dGradient)"/>
+      <!-- Calculator Body -->
+      <rect x="25" y="28" width="40" height="54" rx="8" fill="#ffffff"/>
+      <!-- Display -->
+      <rect x="29" y="33" width="32" height="12" rx="3" fill="#e0f2fe"/>
+      <text x="58" y="42" font-family="monospace" font-size="7" font-weight="bold" fill="#0369a1" text-anchor="end">0.00</text>
+      <!-- Calculator Buttons -->
+      <rect x="29" y="48" width="14" height="14" rx="3" fill="#0284c7"/>
+      <text x="36" y="58.5" font-family="sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">+</text>
+      
+      <rect x="47" y="48" width="14" height="14" rx="3" fill="#0284c7"/>
+      <text x="54" y="58" font-family="sans-serif" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">−</text>
+      
+      <rect x="29" y="65" width="14" height="14" rx="3" fill="#0284c7"/>
+      <text x="36" y="75" font-family="sans-serif" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">×</text>
+      
+      <rect x="47" y="65" width="14" height="14" rx="3" fill="#14b8a6"/>
+      <text x="54" y="75" font-family="sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">=</text>
+      
+      <!-- Plus Symbol -->
+      <path d="M 72 32 H 80 V 38 H 86 V 46 H 80 V 52 H 72 V 46 H 66 V 38 H 72 Z" fill="#ffffff"/>
+      
+      <!-- Pill / Capsule -->
+      <g transform="translate(80, 72) rotate(-35)">
+        <rect x="-13" y="-26" width="26" height="52" rx="13" fill="#0e7490" stroke="#0284c7" stroke-width="1.5"/>
+        <path d="M -12 -25 A 12 12 0 0 1 12 -25 L 12 0 L -12 0 Z" fill="#14b8a6"/>
+        <path d="M -12 0 L 12 0 L 12 25 A 12 12 0 0 1 -12 25 Z" fill="#ffffff"/>
+        <path d="M -7 -20 A 7 7 0 0 1 3 -20" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+      </g>
+    </svg>
+  </div>
+  <h1>DIGITAL DOSE<small>Kalkulator dosis &amp; cairan klinis</small></h1>
+  <button class="theme-btn" onclick="toggleTheme()" aria-label="Ubah Tema">🌗</button>
+</header>
+
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>
+
+<aside id="drawer" class="drawer">
+  <div class="drawer-head">
+    <div class="logo">
+      <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <use href="#dGradient"/>
+        <path d="M 15 15 H 55 C 88 15 105 38 105 60 C 105 82 88 105 55 105 H 15 Z" fill="url(#dGradient)"/>
+        <rect x="25" y="28" width="40" height="54" rx="8" fill="#ffffff"/>
+        <rect x="29" y="33" width="32" height="12" rx="3" fill="#e0f2fe"/>
+        <text x="58" y="42" font-family="monospace" font-size="7" font-weight="bold" fill="#0369a1" text-backdrop-filter: blur(28px) saturate(180%);
   animation: fade 0.45s ease;
   transition: 0.35s;
 }
