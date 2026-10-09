@@ -43,7 +43,20 @@
     }
   </script>
 
-  <!-- Dynamic PWA Manifest -->
+    <!-- PWA Manifest & Service Worker -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%230f172a'/><circle cx='256' cy='256' r='180' fill='none' stroke='%2306b6d4' stroke-width='16'/><path d='M160 180 h192 v160 h-192 z' fill='%231e293b' stroke='%230891b2' stroke-width='12' rx='24'/><text x='256' y='260' text-anchor='middle' fill='%2322d3ee' font-family='monospace' font-weight='bold' font-size='48'>0.00</text><path d='M256 100 v60 M226 130 h60' stroke='%2338bdf8' stroke-width='16' stroke-linecap='round'/></svg>">
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker Registered!', reg))
+          .catch(err => console.error('Service Worker Error:', err));
+      });
+    }
+  </script>
+
   <script>
     const manifestData = {
       "name": "Digital Dose Clinical Calculator",
