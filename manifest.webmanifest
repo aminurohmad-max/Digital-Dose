@@ -1,11 +1,12 @@
 {
   "name": "Digital Dose Clinical Calculator",
   "short_name": "Digital Dose",
-  "start_url": "./index.html",
+  "start_url": "./",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0f172a",
   "theme_color": "#0891b2",
-  "description": "Kalkulator Dosis Obat & Cairan Medis Presisi",
+  "description": "Kalkulator Dosis Obat, Tetesan Infus, Resusitasi Luka Bakar Baxter, AGD, MAP & BMI - Clinical Calculator Suite",
   "icons": [
     {
       "src": "icon-192.png",
