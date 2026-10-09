@@ -1,42 +1,39 @@
-const CACHE_NAME = 'digital-dose-v2';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'digital-dose-v3';
+const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png',
-  'https://cdn.tailwindcss.com',
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;800&display=swap'
+  './icon-512.png'
 ];
 
+// Install: cache core assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+      return cache.addAll(ASSETS);
     })
   );
   self.skipWaiting();
 });
 
+// Activate: clean old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then((keys) => {
       return Promise.all(
-        cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
-            return caches.delete(cache);
-          }
-        })
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
       );
     })
   );
   self.clients.claim();
 });
 
+// Fetch: cache-first strategy
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+    caches.match(event.request).then((cached) => {
+      return cached || fetch(event.request);
     })
   );
 });
