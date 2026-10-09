@@ -1,8 +1,10 @@
-const CACHE_NAME = 'digital-dose-v1';
+const CACHE_NAME = 'digital-dose-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;800&display=swap'
 ];
